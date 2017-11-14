@@ -273,6 +273,102 @@ void Kerato_image_proc::delete_frame(Mat image_source, short int fx1, short int 
 	imwrite("frame.jpg", image_source);
 }
 
+short int Kerato_image_proc::juke_step(Mat image_source, short int prev_step, short int trashold, int zx, int zy, bool select)
+{
+	//bool select: 1 "вперед" - ход слева направо, 0 "назад" - ход справа налево.
+	//Ходы по горизонтали и вертикали
+
+	if (select == 1)
+	{
+		if (0 <= zy < image_source.rows)
+		{
+			if (0 <= zx < image_source.cols)
+			{
+				if ((prev_step == 3) && (zy == (image_source.rows - 1)))
+				{
+					return 0;
+				}
+				if (stop_auto_frame_light(image_source, zx, zy, 1) == 1)
+				{
+					return 0;
+				}
+				//Ход вправо
+				if ((image_source.at<unsigned char>(zy, (zx + 1)) > trashold ) && (image_source.at<unsigned char>(zy, (zx + 1)) < 100))
+				{
+					return 3;
+				}
+				////Ход вверх
+				//if ((image_source.at<unsigned char>((zy - 1), zx) > trashold) && (image_source.at<unsigned char>((zy - 1), zx) < (trashold + trashold / 2)) && (prev_step != 5))
+				//{
+				//	return 4;
+				//}
+				//Ход вниз
+				if ((image_source.at<unsigned char>((zy + 1), zx) > trashold) && (image_source.at<unsigned char>((zy + 1), zx) < 100) && (prev_step != 4))
+				{
+					return 5;
+				}
+				////Ход вправо-вверх
+				//if ((image_source.at<unsigned char>((zy - 1), (zx + 1)) > trashold) && (image_source.at<unsigned char>((zy - 1), (zx + 1)) < (trashold + trashold / 2)))
+				//{
+				//	return 1;
+				//}
+				//Ход вправо-вниз
+				if ((image_source.at<unsigned char>((zy + 1), (zx + 1)) > trashold) && (image_source.at<unsigned char>((zy + 1), (zx + 1)) < 100))
+				{
+					return 2;
+				}	
+				return 0;
+			}
+		}
+	}
+	else if (select == 0)
+	{
+		if (0 <= zy < image_source.rows)
+		{
+			if (0 <= zx < image_source.cols)
+			{
+				if ((prev_step == 3) && (zy == (image_source.rows - 1)))
+				{
+					return 0;
+				}
+				if (stop_auto_frame_light(image_source, zx, zy, 0) == 1)
+				{
+					return 0;
+				}
+				//Ход влево
+				if ((image_source.at<unsigned char>(zy, (zx - 1)) > trashold) && (image_source.at<unsigned char>(zy, (zx - 1)) < 100))
+				{
+					return 8;
+				}
+				////Ход вверх
+				//if ((image_source.at<unsigned char>((zy - 1), zx) > trashold) && (image_source.at<unsigned char>((zy - 1), zx) < (trashold + trashold / 2)) && (prev_step != 5))
+				//{
+				//	return 4;
+				//}
+				//Ход вниз
+				if ((image_source.at<unsigned char>((zy + 1), zx) > trashold) && (image_source.at<unsigned char>((zy + 1), zx) < 100) && (prev_step != 4))
+				{
+					return 5;
+				}
+				////Ход влево-вверх
+				//if ((image_source.at<unsigned char>((zy - 1), (zx - 1)) > trashold) && (image_source.at<unsigned char>((zy - 1), (zx - 1)) < (trashold + trashold / 2)))
+				//{
+				//	return 6;
+				//}
+				//Ход влево-вниз
+				if ((image_source.at<unsigned char>((zy + 1), (zx - 1)) > trashold) && (image_source.at<unsigned char>((zy + 1), (zx - 1)) < 100))
+				{
+					return 7;
+				}
+				return 0;
+			}
+		}
+	}
+
+	
+	return 0;
+}
+
 void Kerato_image_proc::brightness_delete(Mat image_source)
 {
 	for (int ix = 0; ix < image_source.cols; ix++)

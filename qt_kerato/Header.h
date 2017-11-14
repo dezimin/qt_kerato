@@ -145,27 +145,29 @@ class Kerato_image_proc
 private:
 
 public:
-	//Image_proc(Mat image_in, Mat image_source);
 	Kerato_image_proc();
-	int auto_k_for_frame(Mat image_source, int dy, int dx, bool select);
-	void delete_auto_frame(Mat image_source, int center);
+	
 	int calc_center(Mat image_source);
+	void delete_auto_frame(Mat image_source, int center);
 	void delete_frame(Mat image_source, short int fx1, short int fx2);
-	void brightness_delete(Mat image_source);
-	void delete_noise(Mat image_source);
-	void main_binar(Mat image_source);
-	void binar(Mat image_source);
-	void delete_noise_mini(Mat image_source);
-	void sobel(Mat image_source);
-	void two_line(Mat image_source);
-	void finishing(Mat image_source);
-	void two_line_complete(Mat image_source);
-	void lines_to_mat(Mat image_source, Mat image_proc, int zx, int zy);
-	bool stop_auto_frame_light(Mat image_source, int zx, int zy, bool select);
 	short int juke_step(Mat image, short int prev_step, short int trashold, int zx, int zy, bool select);
-	short int juke_step_two_line(Mat image, short int prev_step, short int trashold, int zx, int zy, bool select);
-	void end_filter(Mat image_source);
-	void line_allocation(Mat image_source);
+	void brightness_delete(Mat image_source);
+	void binar(Mat image_source);
+	void two_line(Mat image_source);
+
+	//void finishing(Mat image_source);
+	//void two_line_complete(Mat image_source);
+	//void lines_to_mat(Mat image_source, Mat image_proc, int zx, int zy);
+	//bool stop_auto_frame_light(Mat image_source, int zx, int zy, bool select);
+	//
+	//short int juke_step_two_line(Mat image, short int prev_step, short int trashold, int zx, int zy, bool select);
+	//void end_filter(Mat image_source);
+	//void line_allocation(Mat image_source);
+	//int auto_k_for_frame(Mat image_source, int dy, int dx, bool select);
+	//void delete_noise_mini(Mat image_source);
+	//void sobel(Mat image_source);
+	//void delete_noise(Mat image_source);
+	//void main_binar(Mat image_source);
 };
 
 class Kerato_calculate
