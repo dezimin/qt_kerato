@@ -173,7 +173,7 @@ void Kerato_image_proc::delete_auto_frame(Mat image_source, int center)
 				fx1 = fx1 + 35;
 				fx2 = fx2 - 35;
 			}*/
-			if ((zx2 - zx1) > 250)
+			/*if ((zx2 - zx1) > 250)
 			{
 				zx1 = zx1 + 30;
 				zx2 = zx2 - 30;
@@ -184,20 +184,19 @@ void Kerato_image_proc::delete_auto_frame(Mat image_source, int center)
 			{
 				MessageBox(0, L"Это изображение не подходит", L"Решение", MB_OK);
 				exit(0);
-			}
-			/*if (((center - zx1) > 200) && ((zx2 - center) > 200))
+			}*/
+			if (((center - zx1) > 150) && ((zx2 - center) > 150))
 			{
-				zx1 = center - 200;
-				zx2 = center + 200;
+				zx1 = center - 150;
+				zx2 = center + 150;
 				delete_frame(image_source, zx1, zx2);
 				break;
-			}*/
-			/*else
+			}
+			else
 			{
-				cout << "bad image" << endl;
-				system("pause");
+				MessageBox(0, L"Это изображение не подходит", L"Решение", MB_OK);
 				exit(0);
-			}*/
+			}
 		}
 	}
 }
