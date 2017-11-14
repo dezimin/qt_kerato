@@ -108,7 +108,7 @@ void Kerato_determination::calc_discus(vector<vector_for_graph>& double_app_radi
 
 
 	//Принимаем решение
-	if ((middle_left_y > middle_center_y + 35) && (middle_right_y > middle_center_y + 35))
+	if ((middle_left_y > middle_center_y + 35) || (middle_right_y > middle_center_y + 35))
 	{
 		MessageBox(0, L"Это 2 стадия или выше", L"Решение", MB_OK);
 		exit(0);

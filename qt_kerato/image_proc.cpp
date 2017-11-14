@@ -72,7 +72,7 @@ void Kerato_image_proc::delete_auto_frame(Mat image_source, int center)
 
 	for (int iy = 0; iy < image_source.rows / 2; iy++)
 	{
-		if (image_source.at<unsigned char>(iy, 320) > 35)
+		if (image_source.at<unsigned char>(iy, 320) > 40)
 		{
 			while (v_p1 == 0)
 			{
@@ -80,12 +80,12 @@ void Kerato_image_proc::delete_auto_frame(Mat image_source, int center)
 				count1++;
 				if (count1 == 1)
 				{
-					zx1 = 320;
+					zx1 = center;
 					zy1 = iy;
 					prev_step_0 = 0;
 				}
 
-				result_step_0 = juke_step(image_source, prev_step_0, 35, zx1, zy1, 0);
+				result_step_0 = juke_step(image_source, prev_step_0, 35, 150, zx1, zy1, 0);
 				switch (result_step_0)
 				{
 				case 1:
@@ -141,12 +141,12 @@ void Kerato_image_proc::delete_auto_frame(Mat image_source, int center)
 
 				if (count2 == 1)
 				{
-					zx2 = 320;
+					zx2 = center;
 					zy2 = iy;
 					prev_step_1 = 0;
 				}
 
-				result_step_1 = juke_step(image_source, prev_step_1, 35, zx2, zy2, 1);
+				result_step_1 = juke_step(image_source, prev_step_1, 35, 150, zx2, zy2, 1);
 				switch (result_step_1)
 				{
 				case 1:
@@ -219,16 +219,16 @@ void Kerato_image_proc::delete_auto_frame(Mat image_source, int center)
 				MessageBox(0, L"Это изображение не подходит", L"Решение", MB_OK);
 				exit(0);
 			}*/
-			if (((center - zx1) > 150) && ((zx2 - center) > 150))
+			if (((center - zx1) > 170) && ((zx2 - center) > 170))
 			{
-				zx1 = center - 150;
-				zx2 = center + 150;
+				zx1 = center - 170;
+				zx2 = center + 170;
 				delete_frame(image_source, zx1, zx2);
 				break;
 			}
 			else
 			{
-				MessageBox(0, L"Это изображение не подходит", L"Решение", MB_OK);
+				MessageBox(0, L"Это изображение не подходит, область роговицы меньше необходимого размера", L"Решение", MB_OK);
 				exit(0);
 			}
 		}
@@ -273,10 +273,12 @@ void Kerato_image_proc::delete_frame(Mat image_source, short int fx1, short int 
 	imwrite("frame.jpg", image_source);
 }
 
-short int Kerato_image_proc::juke_step(Mat image_source, short int prev_step, short int trashold, int zx, int zy, bool select)
+short int Kerato_image_proc::juke_step(Mat image_source, short int prev_step, short int trashold_min, short int trashold_max, int zx, int zy, bool select)
 {
 	//bool select: 1 "вперед" - ход слева направо, 0 "назад" - ход справа налево.
 	//Ходы по горизонтали и вертикали
+
+	//int var_trashold_min = 60;
 
 	if (select == 1)
 	{
@@ -293,27 +295,27 @@ short int Kerato_image_proc::juke_step(Mat image_source, short int prev_step, sh
 					return 0;
 				}
 				//Ход вправо
-				if ((image_source.at<unsigned char>(zy, (zx + 1)) > trashold ) && (image_source.at<unsigned char>(zy, (zx + 1)) < 100))
+				if ((image_source.at<unsigned char>(zy, (zx + 1)) > trashold_min ) && (image_source.at<unsigned char>(zy, (zx + 1)) < trashold_max))
 				{
 					return 3;
 				}
 				////Ход вверх
-				//if ((image_source.at<unsigned char>((zy - 1), zx) > trashold) && (image_source.at<unsigned char>((zy - 1), zx) < (trashold + trashold / 2)) && (prev_step != 5))
+				//if ((image_source.at<unsigned char>((zy - 1), zx) > trashold_min) && (image_source.at<unsigned char>((zy - 1), zx) < (trashold_min + trashold_min / 2)) && (prev_step != 5))
 				//{
 				//	return 4;
 				//}
 				//Ход вниз
-				if ((image_source.at<unsigned char>((zy + 1), zx) > trashold) && (image_source.at<unsigned char>((zy + 1), zx) < 100) && (prev_step != 4))
+				if ((image_source.at<unsigned char>((zy + 1), zx) > trashold_min) && (image_source.at<unsigned char>((zy + 1), zx) < trashold_max) && (prev_step != 4))
 				{
 					return 5;
 				}
 				////Ход вправо-вверх
-				//if ((image_source.at<unsigned char>((zy - 1), (zx + 1)) > trashold) && (image_source.at<unsigned char>((zy - 1), (zx + 1)) < (trashold + trashold / 2)))
+				//if ((image_source.at<unsigned char>((zy - 1), (zx + 1)) > trashold_min) && (image_source.at<unsigned char>((zy - 1), (zx + 1)) < (trashold_min + trashold_min / 2)))
 				//{
 				//	return 1;
 				//}
 				//Ход вправо-вниз
-				if ((image_source.at<unsigned char>((zy + 1), (zx + 1)) > trashold) && (image_source.at<unsigned char>((zy + 1), (zx + 1)) < 100))
+				if ((image_source.at<unsigned char>((zy + 1), (zx + 1)) > trashold_min) && (image_source.at<unsigned char>((zy + 1), (zx + 1)) < trashold_max))
 				{
 					return 2;
 				}	
@@ -321,7 +323,7 @@ short int Kerato_image_proc::juke_step(Mat image_source, short int prev_step, sh
 			}
 		}
 	}
-	else if (select == 0)
+	if (select == 0)
 	{
 		if (0 <= zy < image_source.rows)
 		{
@@ -336,27 +338,27 @@ short int Kerato_image_proc::juke_step(Mat image_source, short int prev_step, sh
 					return 0;
 				}
 				//Ход влево
-				if ((image_source.at<unsigned char>(zy, (zx - 1)) > trashold) && (image_source.at<unsigned char>(zy, (zx - 1)) < 100))
+				if ((image_source.at<unsigned char>(zy, (zx - 1)) > trashold_min) && (image_source.at<unsigned char>(zy, (zx - 1)) < 150))
 				{
 					return 8;
 				}
 				////Ход вверх
-				//if ((image_source.at<unsigned char>((zy - 1), zx) > trashold) && (image_source.at<unsigned char>((zy - 1), zx) < (trashold + trashold / 2)) && (prev_step != 5))
+				//if ((image_source.at<unsigned char>((zy - 1), zx) > trashold_min) && (image_source.at<unsigned char>((zy - 1), zx) < (trashold_min + trashold_min / 2)) && (prev_step != 5))
 				//{
 				//	return 4;
 				//}
 				//Ход вниз
-				if ((image_source.at<unsigned char>((zy + 1), zx) > trashold) && (image_source.at<unsigned char>((zy + 1), zx) < 100) && (prev_step != 4))
+				if ((image_source.at<unsigned char>((zy + 1), zx) > trashold_min) && (image_source.at<unsigned char>((zy + 1), zx) < trashold_max) && (prev_step != 4))
 				{
 					return 5;
 				}
 				////Ход влево-вверх
-				//if ((image_source.at<unsigned char>((zy - 1), (zx - 1)) > trashold) && (image_source.at<unsigned char>((zy - 1), (zx - 1)) < (trashold + trashold / 2)))
+				//if ((image_source.at<unsigned char>((zy - 1), (zx - 1)) > trashold_min) && (image_source.at<unsigned char>((zy - 1), (zx - 1)) < (trashold_min + trashold_min / 2)))
 				//{
 				//	return 6;
 				//}
 				//Ход влево-вниз
-				if ((image_source.at<unsigned char>((zy + 1), (zx - 1)) > trashold) && (image_source.at<unsigned char>((zy + 1), (zx - 1)) < 100))
+				if ((image_source.at<unsigned char>((zy + 1), (zx - 1)) > trashold_min) && (image_source.at<unsigned char>((zy + 1), (zx - 1)) < trashold_max))
 				{
 					return 7;
 				}
@@ -367,6 +369,44 @@ short int Kerato_image_proc::juke_step(Mat image_source, short int prev_step, sh
 
 	
 	return 0;
+}
+
+bool Kerato_image_proc::stop_auto_frame_light(Mat image_source, int zx, int zy, bool select)
+{
+	//bool select: 1 "вперед" - ход слева направо, 0 "назад" - ход справа налево.
+	//Ходы по горизонтали и вертикали
+	if (select == 1)
+	{
+		int fnx = zx + 3;
+		int fny = zy + 30;
+		for (int qx = zx; qx < fnx; qx++)
+		{
+			for (int qy = zy - 1; qy < fny; qy++)
+			{
+				if (image_source.at<unsigned char>(qy, qx) > 150)
+				{
+					return 1;
+				}
+			}
+		}
+		return 0;
+	}
+	if (select == 0)
+	{
+		int fnx = zx - 3;
+		int fny = zy + 30;
+		for (int qx = zx; qx > fnx; qx--)
+		{
+			for (int qy = zy - 1; qy < fny; qy++)
+			{
+				if (image_source.at<unsigned char>(qy, qx) > 150)
+				{
+					return 1;
+				}
+			}
+		}
+		return 0;
+	}
 }
 
 void Kerato_image_proc::brightness_delete(Mat image_source)
@@ -557,6 +597,7 @@ void Kerato_image_proc::two_line(Mat image_source)
 //		}
 //	}
 //}
+
 //
 //void Kerato_image_proc::lines_to_mat(Mat image_source, Mat Kerato_image_proc, int zx, int zy)
 //{
@@ -628,44 +669,8 @@ void Kerato_image_proc::two_line(Mat image_source)
 //	}
 //}
 //
-//bool Kerato_image_proc::stop_auto_frame_light(Mat image_source, int zx, int zy, bool select)
-//{
-//	//bool select: 1 "вперед" - ход слева направо, 0 "назад" - ход справа налево.
-//	//Ходы по горизонтали и вертикали
-//	if (select == 1)
-//	{
-//		int fnx = zx + 3;
-//		int fny = zy + 30;
-//		for (int qx = zx; qx < fnx; qx++)
-//		{
-//			for (int qy = zy - 1; qy < fny; qy++)
-//			{
-//				if (image_source.at<unsigned char>(qy, qx) > 150)
-//				{
-//					return 1;
-//				}
-//			}
-//		}
-//		return 0;
-//	}
-//	if (select == 0)
-//	{
-//		int fnx = zx - 3;
-//		int fny = zy + 30;
-//		for (int qx = zx; qx > fnx; qx--)
-//		{
-//			for (int qy = zy - 1; qy < fny; qy++)
-//			{
-//				if (image_source.at<unsigned char>(qy, qx) > 150)
-//				{
-//					return 1;
-//				}
-//			}
-//		}
-//		return 0;
-//	}
-//}
 //
+
 //short int Kerato_image_proc::juke_step(Mat image_source, short int prev_step, short int trashold, int zx, int zy, bool select)
 //{
 //	//bool select: 1 "вперед" - ход слева направо, 0 "назад" - ход справа налево.

@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	GetCurrentDirectory(MAX_PATH, currDirfordir);
 	wcscat(currDirfordir, L"\\pat_in\\");
 	_bstr_t name_dir(currDirfordir);
-	_bstr_t name_image("1_2.jpg");
+	_bstr_t name_image("9_4.jpg");
 	strcat(name_dir, name_image);
 	const char* image_dir = name_dir;
 	image_source = imread(image_dir, CV_LOAD_IMAGE_GRAYSCALE);

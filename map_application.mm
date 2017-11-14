@@ -12,6 +12,9 @@
 </node>
 <node CREATED="1510673394312" ID="ID_185698482" MODIFIED="1510673444807" TEXT="step_juke(image_source, short int prev_step, short int trashold, int zx, int zy, bool select);">
 <icon BUILTIN="back"/>
+<node CREATED="1510673507593" HGAP="25" ID="ID_993873041" MODIFIED="1510673551513" TEXT="stop_auto_frame_light(Mat image_source, int zx, int zy, bool select);" VSHIFT="-21">
+<icon BUILTIN="back"/>
+</node>
 </node>
 </node>
 <node CREATED="1510671445467" HGAP="21" ID="ID_711002653" MODIFIED="1510672476636" TEXT="&#x424;&#x443;&#x43d;&#x43a;&#x446;&#x438;&#x44f; &#x443;&#x434;&#x430;&#x43b;&#x435;&#x43d;&#x438;&#x44f; &#x437;&#x430;&#x441;&#x432;&#x435;&#x442;&#x43e;&#x432; - brightless_delete(image_source);" VSHIFT="5">

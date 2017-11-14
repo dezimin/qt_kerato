@@ -150,7 +150,8 @@ public:
 	int calc_center(Mat image_source);
 	void delete_auto_frame(Mat image_source, int center);
 	void delete_frame(Mat image_source, short int fx1, short int fx2);
-	short int juke_step(Mat image, short int prev_step, short int trashold, int zx, int zy, bool select);
+	short int juke_step(Mat image_source, short int prev_step, short int trashold_min, short int trashold_max, int zx, int zy, bool select);
+	bool stop_auto_frame_light(Mat image_source, int zx, int zy, bool select);
 	void brightness_delete(Mat image_source);
 	void binar(Mat image_source);
 	void two_line(Mat image_source);
@@ -158,7 +159,7 @@ public:
 	//void finishing(Mat image_source);
 	//void two_line_complete(Mat image_source);
 	//void lines_to_mat(Mat image_source, Mat image_proc, int zx, int zy);
-	//bool stop_auto_frame_light(Mat image_source, int zx, int zy, bool select);
+	//
 	//
 	//short int juke_step_two_line(Mat image, short int prev_step, short int trashold, int zx, int zy, bool select);
 	//void end_filter(Mat image_source);
